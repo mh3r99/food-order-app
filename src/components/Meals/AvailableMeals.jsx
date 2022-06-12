@@ -13,7 +13,7 @@ const AvailableMeals = () => {
   const fetchMeals = async () => {
     try {
       const res = await fetch(
-        `https://food-order-81aa1-default-rtdb.europe-west1.firebasedatabase.app/meals.jsosfdn`
+        `https://food-order-81aa1-default-rtdb.europe-west1.firebasedatabase.app/meals.json`
       );
 
       if (!res.ok) {
