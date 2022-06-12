@@ -8,20 +8,31 @@ import { useState } from "react";
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchMeals = async () => {
-    const res = await fetch(
-      `https://food-order-81aa1-default-rtdb.europe-west1.firebasedatabase.app/meals.json`
-    );
-    const data = await res.json();
+    try {
+      const res = await fetch(
+        `https://food-order-81aa1-default-rtdb.europe-west1.firebasedatabase.app/meals.jsosfdn`
+      );
 
-    const loadedMeals = [];
+      if (!res.ok) {
+        throw new Error("Something went wrong!");
+      }
 
-    for (const key in data) {
-      loadedMeals.push({ id: key, ...data[key] });
+      const data = await res.json();
+
+      const loadedMeals = [];
+
+      for (const key in data) {
+        loadedMeals.push({ id: key, ...data[key] });
+      }
+
+      setMeals(loadedMeals);
+    } catch (error) {
+      setError(error.message);
     }
 
-    setMeals(loadedMeals);
     setIsLoading(false);
   };
 
@@ -35,6 +46,14 @@ const AvailableMeals = () => {
     return (
       <section className={classes.MealsLoading}>
         <p>Loading...</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={classes.MealsError}>
+        <p>{error}</p>
       </section>
     );
   }
