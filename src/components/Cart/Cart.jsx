@@ -26,6 +26,23 @@ const Cart = ({ onClose }) => {
     setIsCheckout(true);
   };
 
+  const submitOderHandler = async (userData) => {
+    const res = await fetch(
+      `https://food-order-81aa1-default-rtdb.europe-west1.firebasedatabase.app/orders.json`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          user: userData,
+          orderItems: cartCtx.items,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    console.log(data);
+  };
+
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {cartCtx.items.map((item) => (
@@ -59,7 +76,9 @@ const Cart = ({ onClose }) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onCancel={onClose} />}
+      {isCheckout && (
+        <Checkout onConfirm={submitOderHandler} onCancel={onClose} />
+      )}
       {!isCheckout && modalActions}
     </Modal>
   );
